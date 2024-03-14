@@ -1,0 +1,808 @@
+---
+title: "R workshop - Addon: Bootstrap"
+author: "Bernhard Piskernik"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, message = F, results = 'hide', warning = F)
+```
+
+
+```{r}
+library("install.load")
+
+install_load("installr",
+             "tidyverse",
+             "summarytools",
+             "skimr",
+             "psych",
+             "interactions")
+```
+
+
+```{r}
+ws <- read.csv("ws_data.csv")
+```
+
+
+
+```{r}
+ws <- ws %>% 
+  mutate(DA_ANTC_02_t1 = 101 - DA_ANTC_02_r_t1,
+         DA_ANTC_02_t2 = 101 - DA_ANTC_02_r_t2,
+         DA_ANTC_02_t3 = 101 - DA_ANTC_02_r_t3,
+         DA_ANTC_02_t4 = 101 - DA_ANTC_02_r_t4,
+         DA_ANTC_02_t5 = 101 - DA_ANTC_02_r_t5,
+         DA_ANTC_02_t6 = 101 - DA_ANTC_02_r_t6,
+         DA_ANTC_02_t7 = 101 - DA_ANTC_02_r_t7,
+         DA_ANTC_02_t8 = 101 - DA_ANTC_02_r_t8,
+         DA_ANTC_02_t9 = 101 - DA_ANTC_02_r_t9,
+         DA_ANTC_02_t10 = 101 - DA_ANTC_02_r_t10)
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(across(starts_with("DA_PSYSAFE_"), ~ na_if(., 6)))
+```
+
+
+
+```{r}
+ws <- ws %>%
+  mutate(ILWOTA_t1 = rowMeans(select(ws,
+           c(DA_ILWOTA_01_t1,
+             DA_ILWOTA_02_t1,
+             DA_ILWOTA_03_t1,
+             DA_ILWOTA_04_t1)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ILWOTA_t2 = rowMeans(select(ws,
+           c(DA_ILWOTA_01_t2,
+             DA_ILWOTA_02_t2,
+             DA_ILWOTA_03_t2,
+             DA_ILWOTA_04_t2)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ILWOTA_t3 = rowMeans(select(ws,
+           c(DA_ILWOTA_01_t3,
+             DA_ILWOTA_02_t3,
+             DA_ILWOTA_03_t3,
+             DA_ILWOTA_04_t3)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ILWOTA_t4 = rowMeans(select(ws,
+           c(DA_ILWOTA_01_t4,
+             DA_ILWOTA_02_t4,
+             DA_ILWOTA_03_t4,
+             DA_ILWOTA_04_t4)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ILWOTA_t5 = rowMeans(select(ws,
+           c(DA_ILWOTA_01_t5,
+             DA_ILWOTA_02_t5,
+             DA_ILWOTA_03_t5,
+             DA_ILWOTA_04_t5)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ILWOTA_t6 = rowMeans(select(ws,
+           c(DA_ILWOTA_01_t6,
+             DA_ILWOTA_02_t6,
+             DA_ILWOTA_03_t6,
+             DA_ILWOTA_04_t6)),
+           na.rm = TRUE))
+```
+
+
+
+```{r}
+ws <- ws %>%
+  mutate(ILWOTA_t7 = rowMeans(select(ws,
+           c(DA_ILWOTA_01_t7,
+             DA_ILWOTA_02_t7,
+             DA_ILWOTA_03_t7,
+             DA_ILWOTA_04_t7)),
+           na.rm = TRUE))
+```
+
+
+
+```{r}
+ws <- ws %>%
+  mutate(ILWOTA_t8 = rowMeans(select(ws,
+           c(DA_ILWOTA_01_t8,
+             DA_ILWOTA_02_t8,
+             DA_ILWOTA_03_t8,
+             DA_ILWOTA_04_t8)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ILWOTA_t9 = rowMeans(select(ws,
+           c(DA_ILWOTA_01_t9,
+             DA_ILWOTA_02_t9,
+             DA_ILWOTA_03_t9,
+             DA_ILWOTA_04_t9)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ILWOTA_t10 = rowMeans(select(ws,
+           c(DA_ILWOTA_01_t10,
+             DA_ILWOTA_02_t10,
+             DA_ILWOTA_03_t10,
+             DA_ILWOTA_04_t10)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ILWOTA = rowMeans(select(ws,
+           c(ILWOTA_t1,
+             ILWOTA_t2,
+             ILWOTA_t3,
+             ILWOTA_t4,
+             ILWOTA_t5,
+             ILWOTA_t6,
+             ILWOTA_t7,
+             ILWOTA_t8,
+             ILWOTA_t9,
+             ILWOTA_t10)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(PSYSAFE_t1 = rowMeans(select(ws,
+           c(DA_PSYSAFE_01_t1,
+             DA_PSYSAFE_02_t1,
+             DA_PSYSAFE_03_t1,
+             DA_PSYSAFE_04_t1,
+             DA_PSYSAFE_05_t1,
+             DA_PSYSAFE_06_t1)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(PSYSAFE_t2 = rowMeans(select(ws,
+           c(DA_PSYSAFE_01_t2,
+             DA_PSYSAFE_02_t2,
+             DA_PSYSAFE_03_t2,
+             DA_PSYSAFE_04_t2,
+             DA_PSYSAFE_05_t2,
+             DA_PSYSAFE_06_t2)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(PSYSAFE_t3 = rowMeans(select(ws,
+           c(DA_PSYSAFE_01_t3,
+             DA_PSYSAFE_02_t3,
+             DA_PSYSAFE_03_t3,
+             DA_PSYSAFE_04_t3,
+             DA_PSYSAFE_05_t3,
+             DA_PSYSAFE_06_t3)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(PSYSAFE_t4 = rowMeans(select(ws,
+           c(DA_PSYSAFE_01_t4,
+             DA_PSYSAFE_02_t4,
+             DA_PSYSAFE_03_t4,
+             DA_PSYSAFE_04_t4,
+             DA_PSYSAFE_05_t4,
+             DA_PSYSAFE_06_t4)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(PSYSAFE_t5 = rowMeans(select(ws,
+           c(DA_PSYSAFE_01_t5,
+             DA_PSYSAFE_02_t5,
+             DA_PSYSAFE_03_t5,
+             DA_PSYSAFE_04_t5,
+             DA_PSYSAFE_05_t5,
+             DA_PSYSAFE_06_t5)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(PSYSAFE_t6 = rowMeans(select(ws,
+           c(DA_PSYSAFE_01_t6,
+             DA_PSYSAFE_02_t6,
+             DA_PSYSAFE_03_t6,
+             DA_PSYSAFE_04_t6,
+             DA_PSYSAFE_05_t6,
+             DA_PSYSAFE_06_t6)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(PSYSAFE_t7 = rowMeans(select(ws,
+           c(DA_PSYSAFE_01_t7,
+             DA_PSYSAFE_02_t7,
+             DA_PSYSAFE_03_t7,
+             DA_PSYSAFE_04_t7,
+             DA_PSYSAFE_05_t7,
+             DA_PSYSAFE_06_t7)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(PSYSAFE_t8 = rowMeans(select(ws,
+           c(DA_PSYSAFE_01_t8,
+             DA_PSYSAFE_02_t8,
+             DA_PSYSAFE_03_t8,
+             DA_PSYSAFE_04_t8,
+             DA_PSYSAFE_05_t8,
+             DA_PSYSAFE_06_t8)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(PSYSAFE_t9 = rowMeans(select(ws,
+           c(DA_PSYSAFE_01_t9,
+             DA_PSYSAFE_02_t9,
+             DA_PSYSAFE_03_t9,
+             DA_PSYSAFE_04_t9,
+             DA_PSYSAFE_05_t9,
+             DA_PSYSAFE_06_t9)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(PSYSAFE_t10 = rowMeans(select(ws,
+           c(DA_PSYSAFE_01_t10,
+             DA_PSYSAFE_02_t10,
+             DA_PSYSAFE_03_t10,
+             DA_PSYSAFE_04_t10,
+             DA_PSYSAFE_05_t10,
+             DA_PSYSAFE_06_t10)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(PSYSAFE = rowMeans(select(ws,
+           c(PSYSAFE_t1,
+             PSYSAFE_t2,
+             PSYSAFE_t3,
+             PSYSAFE_t4,
+             PSYSAFE_t5,
+             PSYSAFE_t6,
+             PSYSAFE_t7,
+             PSYSAFE_t8,
+             PSYSAFE_t9,
+             PSYSAFE_t10)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ANG_t1 = rowMeans(select(ws,
+           c(DA_MOOD_ANG_01_t1,
+             DA_MOOD_ANG_02_t1,
+             DA_MOOD_ANG_03_t1)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ANG_t2 = rowMeans(select(ws,
+           c(DA_MOOD_ANG_01_t2,
+             DA_MOOD_ANG_02_t2,
+             DA_MOOD_ANG_03_t2)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ANG_t3 = rowMeans(select(ws,
+           c(DA_MOOD_ANG_01_t3,
+             DA_MOOD_ANG_02_t3,
+             DA_MOOD_ANG_03_t3)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ANG_t4 = rowMeans(select(ws,
+           c(DA_MOOD_ANG_01_t4,
+             DA_MOOD_ANG_02_t4,
+             DA_MOOD_ANG_03_t4)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ANG_t5 = rowMeans(select(ws,
+           c(DA_MOOD_ANG_01_t5,
+             DA_MOOD_ANG_02_t5,
+             DA_MOOD_ANG_03_t5)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ANG_t6 = rowMeans(select(ws,
+           c(DA_MOOD_ANG_01_t6,
+             DA_MOOD_ANG_02_t6,
+             DA_MOOD_ANG_03_t6)),
+           na.rm = TRUE))
+```
+
+```{r}
+ws <- ws %>%
+  mutate(ANG_t7 = rowMeans(select(ws,
+           c(DA_MOOD_ANG_01_t7,
+             DA_MOOD_ANG_02_t7,
+             DA_MOOD_ANG_03_t7)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ANG_t8 = rowMeans(select(ws,
+           c(DA_MOOD_ANG_01_t8,
+             DA_MOOD_ANG_02_t8,
+             DA_MOOD_ANG_03_t8)),
+           na.rm = TRUE))
+```
+
+
+
+```{r}
+ws <- ws %>%
+  mutate(ANG_t9 = rowMeans(select(ws,
+           c(DA_MOOD_ANG_01_t9,
+             DA_MOOD_ANG_02_t9,
+             DA_MOOD_ANG_03_t9)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ANG_t10 = rowMeans(select(ws,
+           c(DA_MOOD_ANG_01_t10,
+             DA_MOOD_ANG_02_t10,
+             DA_MOOD_ANG_03_t10)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(ANG = rowMeans(select(ws,
+           c(ANG_t1,
+             ANG_t2,
+             ANG_t3,
+             ANG_t4,
+             ANG_t5,
+             ANG_t6,
+             ANG_t7,
+             ANG_t8,
+             ANG_t9,
+             ANG_t10)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(SA_t1 = rowMeans(select(ws,
+           c(DA_ANTC_01_t1,
+             DA_ANTC_02_t1)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(SA_t2 = rowMeans(select(ws,
+           c(DA_ANTC_01_t2,
+             DA_ANTC_02_t2)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(SA_t3 = rowMeans(select(ws,
+           c(DA_ANTC_01_t3,
+             DA_ANTC_02_t3)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(SA_t4 = rowMeans(select(ws,
+           c(DA_ANTC_01_t4,
+             DA_ANTC_02_t4)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(SA_t5 = rowMeans(select(ws,
+           c(DA_ANTC_01_t5,
+             DA_ANTC_02_t5)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(SA_t6 = rowMeans(select(ws,
+           c(DA_ANTC_01_t6,
+             DA_ANTC_02_t6)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(SA_t7 = rowMeans(select(ws,
+           c(DA_ANTC_01_t7,
+             DA_ANTC_02_t7)),
+           na.rm = TRUE))
+```
+
+
+
+```{r}
+ws <- ws %>%
+  mutate(SA_t8 = rowMeans(select(ws,
+           c(DA_ANTC_01_t8,
+             DA_ANTC_02_t8)),
+           na.rm = TRUE))
+```
+
+
+
+```{r}
+ws <- ws %>%
+  mutate(SA_t9 = rowMeans(select(ws,
+           c(DA_ANTC_01_t9,
+             DA_ANTC_02_t9)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws <- ws %>%
+  mutate(SA_t10 = rowMeans(select(ws,
+           c(DA_ANTC_01_t10,
+             DA_ANTC_02_t10)),
+           na.rm = TRUE))
+```
+
+
+
+```{r}
+ws <- ws %>%
+  mutate(SA = rowMeans(select(ws,
+           c(SA_t1,
+             SA_t2,
+             SA_t3,
+             SA_t4,
+             SA_t5,
+             SA_t6,
+             SA_t7,
+             SA_t8,
+             SA_t9,
+             SA_t10)),
+           na.rm = TRUE))
+```
+
+
+```{r}
+ws_use <- ws %>%
+  select(ILWOTA, PSYSAFE, SA, ANG)
+
+```
+
+
+```{r}
+summarytools::freq(ws$ST_GENDER)
+```
+
+
+```{r}
+table(ws$ST_GENDER, useNA='ifany')
+```
+
+
+```{r}
+ws %>% skim(ST_AGE)
+```
+
+
+```{r}
+ws %>% 
+  skim(
+    ILWOTA, PSYSAFE, SA, ANG
+  )
+```
+
+
+```{r}
+cor_dat <- ws %>%
+  select(ILWOTA, PSYSAFE, SA, ANG)
+
+cor_dat
+
+```
+
+```{r}
+cor_dat %>% corr.test()
+```
+
+
+```{r}
+lm(SA~ILWOTA, data = ws) %>% 
+  summary()
+```
+
+```{r}
+ws <- ws %>%
+  mutate(
+    ILWOTA_s = scale(ILWOTA, center = T, scale = T)
+    , SA_s = scale(SA, center = T, scale = T)
+  )
+```
+
+```{r}
+lm(
+  SA_s ~ ILWOTA_s
+  , data = ws
+  ) %>% 
+  summary()
+```
+
+```{r, eval=FALSE}
+set.seed(42)
+mediate(
+  SA ~ ILWOTA + (ANG)
+  , data = ws
+) %>% print()
+```
+
+```{r}
+ws <- ws %>%
+  mutate(
+    ILWOTA_c = scale(ILWOTA, center = T, scale = F)
+    , PSYSAFE_c = scale(PSYSAFE, center = T, scale = F))
+```
+
+```{r}
+lm(
+  SA ~ ILWOTA_c * PSYSAFE_c
+  ,  data = ws
+  ) %>%
+  summary()
+```
+
+```{r, eval=FALSE}
+interact_plot(
+  lm(
+  SA ~ ILWOTA_c * PSYSAFE_c
+  ,  data = ws
+  )
+  , pred = ILWOTA_c
+  , modx = PSYSAFE_c
+  , interval = T
+)
+```
+
+
+```{r, eval=FALSE}
+johnson_neyman(
+  lm(
+  SA ~ ILWOTA_c * PSYSAFE_c
+  ,  data = ws
+  )
+  , pred = ILWOTA_c
+  , modx = PSYSAFE_c
+  ,control.fdr = T)
+```
+
+
+# Bootstrapping
+
+Bootstrapping is an excellent way to get reliable/robust error estimations without distributional assumptions.
+
+This workshop included three analyses: 
+
+* simple linear regression
+* mediation
+* moderation
+
+The *mediation* already utilizes bootstrapping (multiplying the two parameters results in an indirect path with non-normal distributed errors, so bootstrapping is required). 
+For the two other analyses, I  will briefly demonstrate how to rewrite the code so that it uses bootstrapping.
+
+## Preparation
+
+First we install the `lmboot` package. There are many other ways/packages to do bootstrapping in  R, but this is one of easiest for `lm` objects.
+
+```{r, echo=TRUE, results='asis'}
+install_load("lmboot")
+```
+
+Next, we set a seed, so that our results stay the same from run to run.
+
+```{r, echo=TRUE, results='asis'}
+seed <- 42
+```
+
+## simple linear regression
+
+The original looked like this:
+
+
+```{r, echo=TRUE, results='asis'}
+lm(
+  SA_s ~ ILWOTA_s
+  , data = ws
+  ) %>% 
+  summary()
+```
+
+The bootstrapped version looks like that:
+
+```{r}
+ws  %>% 
+  select(SA_s, ILWOTA_s) %>%
+  mutate_all(as.vector)
+
+```
+
+
+```{r, echo=TRUE, results='asis'}
+boot_simple_reg <- residual.boot(
+     SA_s ~ ILWOTA_s
+    , data = ws  %>% 
+      # this part is a little awkward - scale() does not return a vector but a one-dimensional matrix
+      # this is mostly irrelevant, because the look and feel alike,
+      # but lmboot cannot deal with it, therefore we need to transform the columns into vectors
+      select(SA_s, ILWOTA_s) %>% 
+      mutate_all(as.vector) %>%
+      # and it cannot deal with missings
+      # so either remove or impute them
+      drop_na()
+    , seed = seed
+  )
+
+
+#plot the sampling distribution of the slope coefficient
+hist(boot_simple_reg$bootEstParam[,2], main="Residual Bootstrap Sampling Distn.",
+xlab="Slope Estimate")
+
+#bootstrap 95% CI for slope parameter (percentile method)
+quantile(boot_simple_reg$bootEstParam[,2], probs=c(.025, .975))
+
+```
+
+Since **0** is not included the confidence 95%-interval [2.5% - 97.5%] the result is significant on a alpha level of 5%.  
+
+
+## moderation
+
+The original moderation  analysis looked like  that:
+
+```{r, echo=TRUE, results='asis'}
+lm(
+  SA ~ ILWOTA_c * PSYSAFE_c
+  ,  data = ws
+  ) %>%
+  summary()
+```
+
+The bootstrapped version looks like that:
+
+We start by performing the analysis
+
+```{r, echo=TRUE, results='asis'}
+boot_moderation <- residual.boot(
+     SA ~ ILWOTA_c * PSYSAFE_c
+    , data = ws  %>% 
+      # this part is a little awkward - scale() does not return a vector but a one-dimensional matrix
+      # this is mostly irrelevant, because the look and feel alike,
+      # but lmboot cannot deal with it, therefore we need to transform the columns into vectors
+      select(SA, ILWOTA_c, PSYSAFE_c) %>% 
+      mutate_all(as.vector) %>%
+      # and it cannot deal with missings
+      # so either remove or impute them
+      drop_na()
+    , seed = seed
+  )
+```
+
+Since there are more parameters we check there sequence. 
+
+```{r, echo=TRUE, results='asis'}
+boot_moderation$bootEstParam  %>% colnames()
+```
+
+### Result for  `ILWOTA_c` 
+
+```{r, echo=TRUE, results='asis'}
+quantile(boot_moderation$bootEstParam[,2], probs=c(.025, .975))
+```
+
+->  0 not included -> significant
+
+### Result for  `PSYSAFE_c`
+
+```{r, echo=TRUE, results='asis'}
+quantile(boot_moderation$bootEstParam[,3], probs=c(.025, .975))
+```
+
+->  0 included -> not significant
+
+### Result for  `ILWOTA_c:PSYSAFE_c` (the interaction)
+
+```{r, echo=TRUE, results='asis'}
+quantile(boot_moderation$bootEstParam[,4], probs=c(.025, .975))
+```
+
+->  0 included -> not significant
